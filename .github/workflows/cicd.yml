@@ -1,0 +1,31 @@
+# Unique name for this workflow
+name: On push develop - Deploy to Dev2 Org
+
+# Definition when the workflow should run
+on:
+    push:
+        branches:
+            - develop
+
+# Jobs to be executed
+jobs:
+    build-deploy:
+        runs-on: ubuntu-latest
+        steps:
+
+            # Checkout the code in the pull request
+            - name: 'Checkout source code'
+              uses: actions/checkout@v2
+
+            - name: 'Build and Deploy'
+              uses: tiagonnascimento/sfdx-orgdev-build-deploy@v2
+              with:
+                type: 'sandbox'
+                certificate_path: devops/server.key.enc
+                decryption_key: ${{ secrets.DECRYPTION_KEY_NON_PRODUCTIVE }}
+                decryption_iv: ${{ secrets.DECRYPTION_IV_NON_PRODUCTIVE }}
+                client_id: ${{ secrets.CONSUMER_KEY_TI01 }}
+                username: ${{ secrets.USERNAME_TI01 }}
+                checkonly: false
+                deploy_wait_time: '10'
+                default_source_path: force-app/main/default
