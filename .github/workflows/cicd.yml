@@ -13,13 +13,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    steps:
-    - name: Install Salesforce CLI
-      run: |
-        npm install sfdx-cli
-        node_modules/sfdx-cli/bin/run --version
-        node_modules/sfdx-cli/bin/run plugins --core
-      
+    steps:      
     - name: Authenticate DevHub
       run: |
         echo "${SALESFORCE_JWT_SECRET_KEY}" > server.key
