@@ -11,23 +11,22 @@ on:
 
 # Jobs to be executed
 jobs:
-    build-deploy:
-        runs-on: ubuntu-latest
-        steps:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Install Salesforce CLI
+      run: |
+        npm install sfdx-cli
+        node_modules/sfdx-cli/bin/run --version
+        node_modules/sfdx-cli/bin/run plugins --core
+      
+    - name: Authenticate DevHub
+      run: |
+        echo "${SALESFORCE_JWT_SECRET_KEY}" > server.key
+        node_modules/sfdx-cli/bin/run force:auth:jwt:grant --clientid ${{ secrets.SALESFORCE_CONSUMER_KEY }} --jwtkeyfile server.key --username ${{ secrets.SALESFORCE_DEVHUB_USERNAME}} --setdefaultdevhubusername -a devhub
+      env:
+        SALESFORCE_JWT_SECRET_KEY: ${{ secrets.SALESFORCE_JWT_SECRET_KEY }}
+      
 
-            # Checkout the code in the pull request
-            - name: 'Checkout source code'
-              uses: actions/checkout@v2
 
-            - name: 'Build and Deploy'
-              uses: tiagonnascimento/sfdx-orgdev-build-deploy@v2
-              with:
-                type: 'sandbox'
-                certificate_path: devops/server.key.enc
-                decryption_key: ${{ secrets.DECRYPTION_KEY_NON_PRODUCTIVE }}
-                decryption_iv: ${{ secrets.DECRYPTION_IV_NON_PRODUCTIVE }}
-                client_id: ${{ secrets.CONSUMER_KEY_TI01 }}
-                username: ${{ secrets.USERNAME_TI01 }}
-                checkonly: false
-                deploy_wait_time: '10'
-                default_source_path: force-app/main/default
+
