@@ -7,7 +7,7 @@ on:
         branches:
             - develop
         paths:
-            - force-app/**
+            - force-app/
 
 # Jobs to be executed
 jobs:
