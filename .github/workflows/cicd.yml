@@ -28,4 +28,4 @@ jobs:
         SALESFORCE_JWT_SECRET_KEY: ${{ secrets.SALESFORCE_JWT_SECRET_KEY }}
         
     - name: Deploy source
-      run: node_modules/sfdx-cli/bin/run force:source:deploy -p force-app/ -u targetorg
+      run: node_modules/sfdx-cli/bin/run force:source:deploy -x manifest/package.xml -u targetorg
