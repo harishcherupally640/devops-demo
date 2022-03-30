@@ -6,7 +6,7 @@ on:
     push:
         branches:
             - develop
-        path:
+        paths:
             - force-app/**
 
 # Jobs to be executed
